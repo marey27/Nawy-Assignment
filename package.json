@@ -17,8 +17,4 @@
     "url": "https://github.com/johnpapa/node-hello/issues"
   },
   "homepage": "https://github.com/johnpapa/node-hello#readme"
-},
-
-"scripts": {
-  "test": "echo \"No tests specified\" && exit 0"
 }
