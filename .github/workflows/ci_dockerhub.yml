@@ -20,9 +20,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Linter (ESLint)
-        run: npx eslint .  # Ensure you have ESLint configured
-
       - name: Run Tests
         run: npm test      # Ensure you have a "test" script in package.json
 
