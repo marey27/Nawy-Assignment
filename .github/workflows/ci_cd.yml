@@ -51,7 +51,7 @@ jobs:
       options: --user root
        
     env:
-      REPOSITORY: nay-assignment
+      REPOSITORY: nawy-assignment
       IMAGE_TAG: latest
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
