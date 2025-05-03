@@ -37,27 +37,22 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install dependencies
         run: |
-          echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get update -y 
           echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get update -y
-        
+          echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get install -y docker.io
 
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: "1.5.0"
 
       - name: Stop and remove existing container
-      run: |
-        # Check if container exists and remove it
-        if docker ps -a --filter "name=node-app" | grep -q "node-app"; then
-          echo "Stopping and removing existing container..."
-          docker stop node-app || true
-          docker rm node-app || true
-        else
-          echo "No existing container found"
-        fi
+        run: |
+          if docker ps -a --filter "name=node-app" | grep -q "node-app"; then
+            docker stop node-app || true
+            docker rm node-app || true
+          fi
 
       - name: Deploy container
         run: |
