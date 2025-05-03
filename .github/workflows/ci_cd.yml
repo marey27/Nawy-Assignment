@@ -42,54 +42,52 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${REPOSITORY}:${IMAGE_TAG} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${REPOSITORY}:${IMAGE_TAG}
-
   deploy:
-  needs: build_and_push
-  runs-on: self-hosted
-  env:
-    REPOSITORY: nawy-assignment
-    IMAGE_TAG: latest
-    DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    needs: build_and_push
+    runs-on: self-hosted
+    env:
+      REPOSITORY: nawy-assignment
+      IMAGE_TAG: latest
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
     
-    - name: Install dependencies
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y unzip
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y unzip
         
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.0
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
 
-    - name: Deploy to Local Docker
-      run: |
-        cat <<'EOF' > main.tf
-        terraform {
+      - name: Deploy to Local Docker
+        run: |
+          cat <<'EOF' > main.tf
+          terraform {
           required_providers {
             docker = {
               source  = "kreuzwerker/docker"
               version = "3.0.2"
             }
           }
-        }
-
-        provider "docker" {}
-
-        resource "docker_container" "app" {
-          name  = "node-hello"
-          image = "${var.docker_image}"
-          ports {
-            internal = 3000
-            external = 3000
           }
-          restart = "unless-stopped"
-        }
-        EOF
 
-        terraform init
-        terraform apply -auto-approve \
+          provider "docker" {}
+
+          resource "docker_container" "app" {
+            name  = "node-hello"
+            image = "${var.docker_image}"
+            ports {
+              internal = 3000
+              external = 3000
+            }
+            restart = "unless-stopped"
+           }
+          EOF
+
+          terraform init
+          terraform apply -auto-approve \
           -var="docker_image=${{ secrets.DOCKERHUB_USERNAME }}/$REPOSITORY:$IMAGE_TAG"
-
