@@ -55,8 +55,8 @@ jobs:
     
       - name: Install dependencies
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y unzip
+          echo "${{ secrets.SUDO_PASS }}" | sudo apt-get update -y
+          echo "${{ secrets.SUDO_PASS }}" | sudo apt-get install -y unzip
         
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
