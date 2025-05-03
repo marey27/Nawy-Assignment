@@ -3,6 +3,7 @@ name: Test, Build, and Push Docker Image
 on:
   push:
     branches: [master]
+
 jobs:
   lint_and_test:
     runs-on: ubuntu-latest
@@ -42,67 +43,62 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${REPOSITORY}:${IMAGE_TAG} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${REPOSITORY}:${IMAGE_TAG}
- deploy:
-  needs: build_and_push
-  runs-on: self-hosted
-  env:
-    REPOSITORY: nawy-assignment
-    IMAGE_TAG: latest
-    DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
 
-    - name: Install unzip
-      run: sudo apt-get install -y unzip
+  deploy:
+    needs: build_and_push
+    runs-on: self-hosted
+    env:
+      REPOSITORY: nawy-assignment
+      IMAGE_TAG: latest
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.5.0
+      - name: Install unzip
+        run: sudo apt-get install -y unzip
 
-    - name: Deploy to Local Docker
-      run: |
-        cat <<'EOF' > main.tf
-        terraform {
-          required_providers {
-            docker = {
-              source  = "kreuzwerker/docker"
-              version = "3.0.2"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Deploy to Local Docker
+        run: |
+          cat <<'EOF' > main.tf
+          terraform {
+            required_providers {
+              docker = {
+                source  = "kreuzwerker/docker"
+                version = "3.0.2"
+              }
             }
           }
-        }
 
-        provider "docker" {}
+          provider "docker" {}
 
-        variable "dockerhub_username" {}
-        variable "repository" {}
-        variable "image_tag" {
-          default = "latest"
-        }
-
-        resource "docker_image" "app_image" {
-          name         = "${var.dockerhub_username}/${var.repository}:${var.image_tag}"
-          keep_locally = false
-        }
-
-        resource "docker_container" "app_container" {
-          name  = "node-hello"
-          image = docker_image.app_image.name
-
-          ports {
-            internal = 3000
-            external = 3000
+          variable "dockerhub_username" {}
+          variable "repository" {}
+          variable "image_tag" {
+            default = "latest"
           }
 
-          restart = "unless-stopped"
-        }
-        EOF
+          resource "docker_container" "app_container" {
+            name  = "node-hello"
+            image = "${var.dockerhub_username}/${var.repository}:${var.image_tag}"
 
-        terraform init
+            ports {
+              internal = 3000
+              external = 3000
+            }
 
-        terraform apply -auto-approve \
-          -var="dockerhub_username=${DOCKERHUB_USERNAME}" \
-          -var="repository=${REPOSITORY}" \
-          -var="image_tag=${IMAGE_TAG}"
+            restart = "unless-stopped"
+          }
+          EOF
+
+          terraform init
+          terraform apply -auto-approve \
+            -var="dockerhub_username=${DOCKERHUB_USERNAME}" \
+            -var="repository=${REPOSITORY}" \
+            -var="image_tag=${IMAGE_TAG}"
  
