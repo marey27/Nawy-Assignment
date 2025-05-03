@@ -49,6 +49,7 @@ jobs:
     env:
       REPOSITORY: nawy-assignment
       IMAGE_TAG: latest
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -62,7 +63,7 @@ jobs:
 
       - name: Deploy to Local Docker
         run: |
-          cat <<EOF > main.tf
+          cat <<'EOF' > main.tf
           terraform {
             required_providers {
               docker = {
