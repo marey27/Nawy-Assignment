@@ -52,39 +52,10 @@ jobs:
           fi
 
       - name: Deploy container
+        working-directory: ./infra  # Target Terraform files
+        env:
+          TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          TF_VAR_image_tag: "latest"
         run: |
-          cat <<EOF > main.tf
-          terraform {
-            required_providers {
-              docker = {
-                source = "kreuzwerker/docker"
-                version = "3.0.2"
-              }
-            }
-          }
-
-          provider "docker" {}
-
-          resource "docker_container" "app" {
-            name  = "node-app"
-            image = "${{ secrets.DOCKERHUB_USERNAME }}/nawy-assignment:latest"
-            ports {
-              internal = 3000
-              external = 3000
-            }
-            restart = "unless-stopped"
-          }
-          EOF
-
           terraform init
           terraform apply -auto-approve
-      - name: Connect app to New Relic
-        run: |
-          # Get the app container's ID
-          APP_CONTAINER_ID=$(docker ps -qf "name=node-app")
-    
-          # Relabel the container for New Relic monitoring
-          docker update \
-            --label com.newrelic.integration=true \
-            --label com.newrelic.application=node-app \
-            $APP_CONTAINER_ID
