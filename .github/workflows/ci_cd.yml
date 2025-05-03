@@ -94,3 +94,4 @@ jobs:
 
           terraform init
           terraform apply -auto-approve
+        shell: bash 
