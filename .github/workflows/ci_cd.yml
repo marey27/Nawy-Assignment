@@ -38,15 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get update -y
-          echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get remove -y containerd docker.io runc || true
-          #echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get install -y docker.io
-          echo "${{ secrets.SUDO_PASS }}" | sudo -S apt-get install -y \
-             docker.io \
-             containerd \
-             runc
+      
 
       - uses: hashicorp/setup-terraform@v2
         with:
