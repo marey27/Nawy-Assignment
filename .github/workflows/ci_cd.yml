@@ -52,7 +52,7 @@ jobs:
           fi
 
       - name: Deploy container
-        working-directory: ./infra  # Target Terraform files
+        working-directory: ./terraform  # Target Terraform files
         env:
           TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
           TF_VAR_image_tag: "latest"
