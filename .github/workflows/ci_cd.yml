@@ -49,7 +49,7 @@ jobs:
       REPOSITORY: nawy-assignment
       IMAGE_TAG: latest
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      TF_VAR_docker_image: ${{ secrets.DOCKERHUB_USERNAME }}/nawy-assignment:latest
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
