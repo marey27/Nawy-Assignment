@@ -78,3 +78,13 @@ jobs:
 
           terraform init
           terraform apply -auto-approve
+      - name: Connect app to New Relic
+        run: |
+          # Get the app container's ID
+          APP_CONTAINER_ID=$(docker ps -qf "name=node-app")
+    
+          # Relabel the container for New Relic monitoring
+          docker update \
+            --label com.newrelic.integration=true \
+            --label com.newrelic.application=node-app \
+            $APP_CONTAINER_ID
