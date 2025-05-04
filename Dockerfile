@@ -23,3 +23,4 @@ EXPOSE 3000
 
 # 7. Define the command to run the app
 CMD ["npm", "start"]
+
