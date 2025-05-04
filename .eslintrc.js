@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    // Add custom rules here
+    "no-console": "off",  // Example: Disable console.log warnings
+    "indent": ["error", 2] // Force 2-space indentation
   }
 };
