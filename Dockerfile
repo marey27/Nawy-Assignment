@@ -8,8 +8,7 @@ WORKDIR /usrsrc/app
 COPY package*.json . 
 
 # 4. Install dependencies
-RUN npm install && \
-	npm install eslint --save-dev
+RUN npm install --include=dev
 
 
 # 5. Copy the rest of the application code

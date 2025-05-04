@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"No tests configured\" && exit 0",
-    "lint": "eslint . || exit 0", 
-    "lint:strict": "eslint ."     
+    "lint": "eslint . || echo \"Linting issues found\" && exit 0",
+    "lint:ci": "eslint ."    
   },
   "repository": {
     "type": "git",

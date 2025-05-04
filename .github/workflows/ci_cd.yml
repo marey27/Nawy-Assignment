@@ -14,8 +14,9 @@ jobs:
           node-version: 18
           cache: 'npm'
       - run: npm install
+      - run: npm install --include=dev
       - run: npm test
-      - run: npm run lint 
+      - run: npm run lint:ci 
 
   build_and_push:
     needs: lint_and_test
