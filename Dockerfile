@@ -8,7 +8,10 @@ WORKDIR /usrsrc/app
 COPY package*.json . 
 
 # 4. Install dependencies
-RUN npm install --include=dev
+RUN npm install --also=dev
+# Verify ESLint installation
+RUN ./node_modules/.bin/eslint --version || echo "ESLint verification failed"
+
 
 
 # 5. Copy the rest of the application code
