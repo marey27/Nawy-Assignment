@@ -9,7 +9,8 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    "no-console": "off",  // Example: Disable console.log warnings
     "indent": ["error", 2] // Force 2-space indentation
+    "no-console": "warn",  // Downgrade to warning
+    "semi": ["error", "always"]  // Enforce semicolons
   }
 };
