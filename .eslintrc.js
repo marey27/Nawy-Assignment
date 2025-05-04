@@ -10,7 +10,7 @@ module.exports = {
   },
   rules: {
     "indent": ["error", 2] // Force 2-space indentation
-    "no-console": "warn",  // Downgrade to warning
-    "semi": ["error", "always"]  // Enforce semicolons
+    'no-console': 'warn',   // Corrected syntax
+    semi: ['error', 'always']  // Enforce semicolons
   }
 };
