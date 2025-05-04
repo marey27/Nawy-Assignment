@@ -46,7 +46,7 @@ jobs:
         with:
           terraform_version: "1.5.0"
 
-      - name: Stop and remove existing container
+      - name: Stop and removing existing container
         run: |
           if docker ps -a --filter "name=node-app" | grep -q "node-app"; then
             docker stop node-app || true
