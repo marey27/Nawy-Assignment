@@ -8,8 +8,8 @@ WORKDIR /usrsrc/app
 COPY package*.json . 
 
 # 4. Install dependencies
-RUN npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin 
-RUN npx eslint --init
+RUN npm install && \
+	npm install eslint --save-dev
 
 
 # 5. Copy the rest of the application code
