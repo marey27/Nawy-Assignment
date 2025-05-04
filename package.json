@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"No tests configured\" && exit 0",
-    "lint": "./node_modules/.bin/eslint . || echo 'Linting completed'",
-    "lint:ci": "./node_modules/.bin/eslint ." 
+    "lint": "eslint . --config .eslintrc.js || echo 'Linting completed with issues'",
+    "lint:ci": "eslint . --config .eslintrc.js"
   },
   "devDependencies": {
     "eslint": "^8.56.0"

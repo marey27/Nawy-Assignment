@@ -9,6 +9,7 @@ COPY package*.json .
 
 # 4. Install dependencies
 RUN npm install --also=dev
+COPY .eslint* ./
 # Verify ESLint installation
 RUN ./node_modules/.bin/eslint --version || echo "ESLint verification failed"
 
